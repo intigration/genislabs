@@ -1,0 +1,44 @@
+[
+  {
+    "name": "about",
+    "path": "/about",
+    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\about.vue",
+    "chunkName": "pages/about"
+  },
+  {
+    "name": "blog",
+    "path": "/blog",
+    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\blog.vue",
+    "chunkName": "pages/blog"
+  },
+  {
+    "name": "blog-details",
+    "path": "/blog-details",
+    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\blog-details.vue",
+    "chunkName": "pages/blog-details"
+  },
+  {
+    "name": "contact",
+    "path": "/contact",
+    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\contact.vue",
+    "chunkName": "pages/contact"
+  },
+  {
+    "name": "project",
+    "path": "/project",
+    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\project.vue",
+    "chunkName": "pages/project"
+  },
+  {
+    "name": "project-details",
+    "path": "/project-details",
+    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\project-details.vue",
+    "chunkName": "pages/project-details"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\index.vue",
+    "chunkName": "pages/index"
+  }
+]
