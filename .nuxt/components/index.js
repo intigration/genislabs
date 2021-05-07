@@ -1,3 +1,5 @@
+import { wrapFunctional } from './utils'
+
 export { default as AboutOne } from '../..\\components\\AboutOne.vue'
 export { default as BannerOne } from '../..\\components\\BannerOne.vue'
 export { default as BlogDetailsPost } from '../..\\components\\BlogDetailsPost.vue'
@@ -49,34 +51,3 @@ export const LazyTestimonial = import('../..\\components\\Testimonial.vue' /* we
 export const LazyTheHeader = import('../..\\components\\TheHeader.vue' /* webpackChunkName: "components/the-header" */).then(c => wrapFunctional(c.default || c))
 export const LazyTheHeaderTwo = import('../..\\components\\TheHeaderTwo.vue' /* webpackChunkName: "components/the-header-two" */).then(c => wrapFunctional(c.default || c))
 export const LazyVideoCallToAction = import('../..\\components\\VideoCallToAction.vue' /* webpackChunkName: "components/video-call-to-action" */).then(c => wrapFunctional(c.default || c))
-
-// nuxt/nuxt.js#8607
-export function wrapFunctional(options) {
-  if (!options || !options.functional) {
-    return options
-  }
-
-  const propKeys = Array.isArray(options.props) ? options.props : Object.keys(options.props || {})
-
-  return {
-    render(h) {
-      const attrs = {}
-      const props = {}
-
-      for (const key in this.$attrs) {
-        if (propKeys.includes(key)) {
-          props[key] = this.$attrs[key]
-        } else {
-          attrs[key] = this.$attrs[key]
-        }
-      }
-
-      return h(options, {
-        on: this.$listeners,
-        attrs,
-        props,
-        scopedSlots: this.$scopedSlots,
-      }, this.$slots.default)
-    }
-  }
-}
