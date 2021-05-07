@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import Vuex from 'vuex'
 import Meta from 'vue-meta'
 import ClientOnly from 'vue-client-only'
 import NoSsr from 'vue-no-ssr'
@@ -9,11 +9,17 @@ import NuxtError from '..\\layouts\\error.vue'
 import Nuxt from './components/nuxt.js'
 import App from './App.js'
 import { setContext, getLocation, getRouteData, normalizeError } from './utils'
+import { createStore } from './store.js'
 
 /* Plugins */
 
 import nuxt_plugin_plugin_462cd209 from 'nuxt_plugin_plugin_462cd209' // Source: .\\components\\plugin.js (mode: 'all')
 import nuxt_plugin_bootstrapvue_49e8bddb from 'nuxt_plugin_bootstrapvue_49e8bddb' // Source: .\\bootstrap-vue.js (mode: 'all')
+import nuxt_plugin_workbox_16bc85c8 from 'nuxt_plugin_workbox_16bc85c8' // Source: .\\workbox.js (mode: 'client')
+import nuxt_plugin_metaplugin_ea6d9b70 from 'nuxt_plugin_metaplugin_ea6d9b70' // Source: .\\pwa\\meta.plugin.js (mode: 'all')
+import nuxt_plugin_serviceauthssrserver_74b09bd4 from 'nuxt_plugin_serviceauthssrserver_74b09bd4' // Source: .\\firebase\\service.auth.ssr-server.js (mode: 'server')
+import nuxt_plugin_index_8afe5ee2 from 'nuxt_plugin_index_8afe5ee2' // Source: .\\firebase\\index.js (mode: 'all')
+import nuxt_plugin_serviceauthinitialize_15c1e4a4 from 'nuxt_plugin_serviceauthinitialize_15c1e4a4' // Source: .\\firebase\\service.auth.initialize.js (mode: 'all')
 import nuxt_plugin_vueawesomeswiper_5ce03f58 from 'nuxt_plugin_vueawesomeswiper_5ce03f58' // Source: ..\\plugins\\vue-awesome-swiper.js (mode: 'all')
 import nuxt_plugin_Mixitupclient_93a1f82c from 'nuxt_plugin_Mixitupclient_93a1f82c' // Source: ..\\plugins\\Mixitup.client.js (mode: 'client')
 import nuxt_plugin_aos_5e4622cf from 'nuxt_plugin_aos_5e4622cf' // Source: ..\\plugins\\aos (mode: 'client')
@@ -46,11 +52,7 @@ Vue.component(Nuxt.name, Nuxt)
 
 Object.defineProperty(Vue.prototype, '$nuxt', {
   get() {
-    const globalNuxt = this.$root.$options.$nuxt
-    if (process.client && !globalNuxt && typeof window !== 'undefined') {
-      return window.$nuxt
-    }
-    return globalNuxt
+    return this.$root.$options.$nuxt
   },
   configurable: true
 })
@@ -59,16 +61,35 @@ Vue.use(Meta, {"keyName":"head","attribute":"data-n-head","ssrAttribute":"data-n
 
 const defaultTransition = {"name":"page","mode":"out-in","appear":false,"appearClass":"appear","appearActiveClass":"appear-active","appearToClass":"appear-to"}
 
+const originalRegisterModule = Vuex.Store.prototype.registerModule
+
+function registerModule (path, rawModule, options = {}) {
+  const preserveState = process.client && (
+    Array.isArray(path)
+      ? !!path.reduce((namespacedState, path) => namespacedState && namespacedState[path], this.state)
+      : path in this.state
+  )
+  return originalRegisterModule.call(this, path, rawModule, { preserveState, ...options })
+}
+
 async function createApp(ssrContext, config = {}) {
   const router = await createRouter(ssrContext, config)
+
+  const store = createStore(ssrContext)
+  // Add this.$router into store actions/mutations
+  store.$router = router
+
+  // Fix SSR caveat https://github.com/nuxt/nuxt.js/issues/3757#issuecomment-414689141
+  store.registerModule = registerModule
 
   // Create Root instance
 
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
-    head: {"title":"ORION LAB","titleTemplate":"%s || Gothic","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"}],"style":[],"script":[]},
+    head: {"title":"GENIS-LAB","titleTemplate":"%s || GenisLab","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"}],"style":[],"script":[]},
 
+    store,
     router,
     nuxt: {
       defaultTransition,
@@ -113,6 +134,9 @@ async function createApp(ssrContext, config = {}) {
     ...App
   }
 
+  // Make app available into store via this.app
+  store.app = app
+
   const next = ssrContext ? ssrContext.next : location => app.router.push(location)
   // Resolve route
   let route
@@ -125,6 +149,7 @@ async function createApp(ssrContext, config = {}) {
 
   // Set context to app.context
   await setContext(app, {
+    store,
     route,
     next,
     error: app.nuxt.error.bind(app),
@@ -151,6 +176,9 @@ async function createApp(ssrContext, config = {}) {
       app.context[key] = value
     }
 
+    // Add into store
+    store[key] = app[key]
+
     // Check if plugin not already installed
     const installKey = '__nuxt_' + key + '_installed__'
     if (Vue[installKey]) {
@@ -172,6 +200,13 @@ async function createApp(ssrContext, config = {}) {
   // Inject runtime config as $config
   inject('config', config)
 
+  if (process.client) {
+    // Replace store state before plugins execution
+    if (window.__NUXT__ && window.__NUXT__.state) {
+      store.replaceState(window.__NUXT__.state)
+    }
+  }
+
   // Add enablePreview(previewData = {}) in context for plugins
   if (process.static && process.client) {
     app.context.enablePreview = function (previewData = {}) {
@@ -187,6 +222,26 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof nuxt_plugin_bootstrapvue_49e8bddb === 'function') {
     await nuxt_plugin_bootstrapvue_49e8bddb(app.context, inject)
+  }
+
+  if (process.client && typeof nuxt_plugin_workbox_16bc85c8 === 'function') {
+    await nuxt_plugin_workbox_16bc85c8(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_metaplugin_ea6d9b70 === 'function') {
+    await nuxt_plugin_metaplugin_ea6d9b70(app.context, inject)
+  }
+
+  if (process.server && typeof nuxt_plugin_serviceauthssrserver_74b09bd4 === 'function') {
+    await nuxt_plugin_serviceauthssrserver_74b09bd4(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_index_8afe5ee2 === 'function') {
+    await nuxt_plugin_index_8afe5ee2(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_serviceauthinitialize_15c1e4a4 === 'function') {
+    await nuxt_plugin_serviceauthinitialize_15c1e4a4(app.context, inject)
   }
 
   if (typeof nuxt_plugin_vueawesomeswiper_5ce03f58 === 'function') {
@@ -212,28 +267,29 @@ async function createApp(ssrContext, config = {}) {
     }
   }
 
-  // Wait for async component to be resolved first
-  await new Promise((resolve, reject) => {
-    router.push(app.context.route.fullPath, resolve, (err) => {
-      // https://github.com/vuejs/vue-router/blob/v3.4.3/src/util/errors.js
-      if (!err._isRouter) return reject(err)
-      if (err.type !== 2 /* NavigationFailureType.redirected */) return resolve()
+  // If server-side, wait for async component to be resolved first
+  if (process.server && ssrContext && ssrContext.url) {
+    await new Promise((resolve, reject) => {
+      router.push(ssrContext.url, resolve, (err) => {
+        // https://github.com/vuejs/vue-router/blob/v3.4.3/src/util/errors.js
+        if (!err._isRouter) return reject(err)
+        if (err.type !== 2 /* NavigationFailureType.redirected */) return resolve()
 
-      // navigated to a different route in router guard
-      const unregister = router.afterEach(async (to, from) => {
-        if (process.server && ssrContext && ssrContext.url) {
+        // navigated to a different route in router guard
+        const unregister = router.afterEach(async (to, from) => {
           ssrContext.url = to.fullPath
-        }
-        app.context.route = await getRouteData(to)
-        app.context.params = to.params || {}
-        app.context.query = to.query || {}
-        unregister()
-        resolve()
+          app.context.route = await getRouteData(to)
+          app.context.params = to.params || {}
+          app.context.query = to.query || {}
+          unregister()
+          resolve()
+        })
       })
     })
-  })
+  }
 
   return {
+    store,
     app,
     router
   }

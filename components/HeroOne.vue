@@ -57,18 +57,26 @@
                 },
 
                 heros: [
+                     {
+                        id: 3,
+                        subTitle: "Intelligence",
+                        title: "Analytics tells, <br> future",
+                        desc: "Combine with ideas of owner, Dustin Mahone. Arquito’s team completed a super villa with many powerful features, help owner really enjoy his life beside the beach",
+                        btnUrl: "/project",
+                        imgSrc: "/images/slider/slide-1.jpg"
+                    },
                     {
                         id: 1,
-                        subTitle: "Residence",
-                        title: "Dustin Villa, <br> Spain",
+                        subTitle: "Autonomus Machines",
+                        title: "Predict machine, <br> downtime",
                         desc: "Combine with ideas of owner, Dustin Mahone. Arquito’s team completed a super villa with many powerful features, help owner really enjoy his life beside the beach",
                         btnUrl: "/project",
                         imgSrc: "/images/slider/slide-1.jpg"
                     },
                     {
                         id: 2,
-                        subTitle: "Residence",
-                        title: "Dustin Villa, <br> Spain",
+                        subTitle: "Cloud Management",
+                        title: "Private Cloud, <br> Kubernates",
                         desc: "Combine with ideas of owner, Dustin Mahone. Arquito’s team completed a super villa with many powerful features, help owner really enjoy his life beside the beach",
                         btnUrl: "/project",
                         imgSrc: "/images/slider/slide-2.jpg"

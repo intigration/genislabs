@@ -55,7 +55,7 @@ const createNext = ssrContext => (opts) => {
   }
   let fullPath = withQuery(opts.path, opts.query)
   const $config = ssrContext.runtimeConfig || {}
-  const routerBase = ($config._app && $config._app.basePath) || '/'
+  const routerBase = ($config.app && $config.app.basePath) || '/'
   if (!fullPath.startsWith('http') && (routerBase !== '/' && !fullPath.startsWith(routerBase))) {
     fullPath = joinURL(routerBase, fullPath)
   }
@@ -82,7 +82,7 @@ export default async (ssrContext) => {
   // Used for beforeNuxtRender({ Components, nuxtState })
   ssrContext.beforeRenderFns = []
   // Nuxt object (window.{{globals.context}}, defaults to window.__NUXT__)
-  ssrContext.nuxt = { layout: 'default', data: [], fetch: {}, error: null, serverRendered: true, routePath: '' }
+  ssrContext.nuxt = { layout: 'default', data: [], fetch: {}, error: null, state: null, serverRendered: true, routePath: '' }
 
     ssrContext.fetchCounters = {}
 
@@ -90,11 +90,11 @@ export default async (ssrContext) => {
 
   // Public runtime config
   ssrContext.nuxt.config = ssrContext.runtimeConfig.public
-  if (ssrContext.nuxt.config._app) {
-    __webpack_public_path__ = joinURL(ssrContext.nuxt.config._app.cdnURL, ssrContext.nuxt.config._app.assetsPath)
+  if (ssrContext.nuxt.config.app) {
+    __webpack_public_path__ = joinURL(ssrContext.nuxt.config.app.cdnURL, ssrContext.nuxt.config.app.assetsPath)
   }
   // Create the app definition and the instance (created for each request)
-  const { app, router } = await createApp(ssrContext, ssrContext.runtimeConfig.private)
+const { app, router, store } = await createApp(ssrContext, ssrContext.runtimeConfig.private)
   const _app = new Vue(app)
   // Add ssr route path to nuxt context so we can account for page navigation between ssr and csr
   ssrContext.nuxt.routePath = app.context.route.path
@@ -108,6 +108,11 @@ export default async (ssrContext) => {
   const beforeRender = async () => {
     // Call beforeNuxtRender() methods
     await Promise.all(ssrContext.beforeRenderFns.map(fn => promisify(fn, { Components, nuxtState: ssrContext.nuxt })))
+
+    ssrContext.rendered = () => {
+      // Add the state from the vuex store
+      ssrContext.nuxt.state = store.state
+    }
   }
 
   const renderErrorPage = async () => {
@@ -134,7 +139,26 @@ export default async (ssrContext) => {
   const s = Date.now()
 
   // Components are already resolved by setContext -> getRouteData (app/utils.js)
-  const Components = getMatchedComponents(app.context.route)
+  const Components = getMatchedComponents(router.match(ssrContext.url))
+
+  /*
+  ** Dispatch store nuxtServerInit
+  */
+  if (store._actions && store._actions.nuxtServerInit) {
+    try {
+      await store.dispatch('nuxtServerInit', app.context)
+    } catch (err) {
+      console.debug('Error occurred when calling nuxtServerInit: ', err.message)
+      throw err
+    }
+  }
+  // ...If there is a redirect or an error, stop the process
+  if (ssrContext.redirected) {
+    return noopApp()
+  }
+  if (ssrContext.nuxt.error) {
+    return renderErrorPage()
+  }
 
   /*
   ** Call global middleware (nuxt.config.js)

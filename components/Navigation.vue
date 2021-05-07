@@ -2,13 +2,13 @@
     <nav class="main-menu" :class="addClassNeme">
         <ul>
             <li class="has-children">
-                <n-link to="/">Home</n-link>
+                <n-link to="/">CONSOLE</n-link>
             </li>
             <li class="has-children">
-                <n-link to="/about">About</n-link>
+                <n-link to="/about">Labs</n-link>
             </li>
             <li class="has-children">
-                <n-link to="/project">Project</n-link>
+                <n-link to="/project">Automation</n-link>
                 <ul class="submenu">
                     <li>
                         <n-link to="/project">Project</n-link>
@@ -19,7 +19,7 @@
                 </ul>
             </li>
             <li class="has-children">
-                <n-link to="/blog">Blog</n-link>
+                <n-link to="/blog">Learn</n-link>
                 <ul class="submenu">
                     <li>
                         <n-link to="/blog">Blog</n-link>
@@ -30,7 +30,7 @@
                 </ul>
             </li>
             <li>
-                <n-link to="/contact">Contact</n-link>
+                <n-link to="/contact">Predict</n-link>
             </li>
         </ul>
     </nav>

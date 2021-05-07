@@ -9,15 +9,15 @@
                 </div>
                 <div class="col-lg-6 mb-10 col-md-12 align-self-center order-1 order-lg-2" data-aos="fade-left" data-aos-delay="500">
                     <div class="history-wrapper">
-                        <h1 class="title">Gothic Studio</h1>
+                        <h1 class="title">GenisLab Technologies</h1>
                         <div class="history-content">
-                            <h4 class="subtitle">Founded in Lebanon in 1967, Archo Architecture Company (KCC) has grown to become one of the Middle East's leading construction contractors.</h4>
-                            <p>We specialise in complex and prestigious construction and infrastructure projects. Our portfolio includes some of the region’s most iconic landmarks, from super high-rise luxury developments, to five star hotels, hospitals and intricately sophisticated smart buildings. </p>
+                            <h4 class="subtitle">Middle East's leading idependant software contractors.</h4>
+                            <p>We specialise in complex domain projects. Our portfolio includes some of the mission critical projects, from web developments, to technology stacks, visualization and intricately sophisticated smart devices. </p>
                             <p>We have compiled an extensive list of other area clinics and health resources, so that when someone calls.</p>
                         </div>
                         <div class="signature">
                             <img src="/images/icon/sign.png" alt="Sign">
-                            <h4 class="title">Daniel JR</h4>
+                            <h4 class="title">ImGenis!</h4>
                         </div>
                     </div>
                 </div>

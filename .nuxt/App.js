@@ -10,6 +10,8 @@ import '..\\node_modules\\bootstrap\\dist\\css\\bootstrap.css'
 
 import '..\\node_modules\\bootstrap-vue\\dist\\bootstrap-vue.css'
 
+import '..\\node_modules\\@nuxtjs\\tailwindcss\\dist\\runtime\\tailwind.css'
+
 import '..\\assets\\scss\\style.scss'
 
 import _6f6c098b from '..\\layouts\\default.vue'

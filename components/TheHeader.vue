@@ -23,8 +23,10 @@
 
                                 <!-- Language Start -->
                                 <div class="language language-white d-md-none d-lg-flex">
-                                    <a href="javascript:void(0)">Eng</a>
-                                    <a href="javascript:void(0)"> <span>Fra</span></a>
+                                <n-link to="/contact">
+                                    <a href="javascript:void(0)">COVID COVERAGE</a>
+                                </n-link>    
+                                    <a href="javascript:void(0)"> <span>Login</span></a>
                                 </div>
                                 <!-- Language End -->
                             </div>

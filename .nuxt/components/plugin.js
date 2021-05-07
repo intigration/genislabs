@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { wrapFunctional } from './utils'
+import { wrapFunctional } from './index'
 
 const components = {
   AboutOne: () => import('../..\\components\\AboutOne.vue' /* webpackChunkName: "components/about-one" */).then(c => wrapFunctional(c.default || c)),

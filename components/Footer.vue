@@ -59,7 +59,7 @@
                     <!-- Footer Social Icons End -->
 
                     <!-- Copyright Start -->
-                    <div class="copyright">© 2021 <span>GOTHIC</span> Made with <i class="icofont-heart-alt text-danger"></i> by <a href="https://hasthemes.com/">HasThemes</a></div>
+                    <div class="copyright">© 2021 <span>GenisLab Technologies</span> Powered with <a href="http://themachinebox.com/">theMachineBox</a></div>
                     <!-- Copyright End -->
                 </div>
             </div>
