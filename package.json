@@ -1,7 +1,7 @@
 {
   "name": "genislab",
   "version": "1.0.0",
-  "author": "uzzal",
+  "author": "muhammad.farhan",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -29,7 +29,7 @@
     "sass-loader": "^10.0.2",
     "webpack": "^4.44.2"
   },
-  "description": "```bash\r # install dependencies\r $ npm install",
+  "description": "yarn install",
   "main": "nuxt.config.js",
   "keywords": [
     "genislab"
