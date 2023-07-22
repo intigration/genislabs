@@ -2,43 +2,50 @@
   {
     "name": "about",
     "path": "/about",
-    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\about.vue",
-    "chunkName": "pages/about"
+    "component": "/workspaces/genislabs/pages/about.vue",
+    "chunkName": "pages/about",
+    "_name": "_0b0e1d9a"
   },
   {
     "name": "blog",
     "path": "/blog",
-    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\blog.vue",
-    "chunkName": "pages/blog"
+    "component": "/workspaces/genislabs/pages/blog.vue",
+    "chunkName": "pages/blog",
+    "_name": "_ad4ba428"
   },
   {
     "name": "blog-details",
     "path": "/blog-details",
-    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\blog-details.vue",
-    "chunkName": "pages/blog-details"
+    "component": "/workspaces/genislabs/pages/blog-details.vue",
+    "chunkName": "pages/blog-details",
+    "_name": "_1f0face1"
   },
   {
     "name": "contact",
     "path": "/contact",
-    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\contact.vue",
-    "chunkName": "pages/contact"
+    "component": "/workspaces/genislabs/pages/contact.vue",
+    "chunkName": "pages/contact",
+    "_name": "_427e44c6"
   },
   {
     "name": "project",
     "path": "/project",
-    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\project.vue",
-    "chunkName": "pages/project"
+    "component": "/workspaces/genislabs/pages/project.vue",
+    "chunkName": "pages/project",
+    "_name": "_0809473f"
   },
   {
     "name": "project-details",
     "path": "/project-details",
-    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\project-details.vue",
-    "chunkName": "pages/project-details"
+    "component": "/workspaces/genislabs/pages/project-details.vue",
+    "chunkName": "pages/project-details",
+    "_name": "_1fc5c334"
   },
   {
     "name": "index",
     "path": "/",
-    "component": "D:\\\\nuxtjs\\\\gothic\\\\gothic\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "component": "/workspaces/genislabs/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_1a30cbf8"
   }
 ]
