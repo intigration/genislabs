@@ -1,5 +1,4 @@
-# gothic-vue
-
+# GenisLab
 ## Build Setup
 
 ```bash
@@ -17,4 +16,4 @@ $ npm run start
 $ npm run generate
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+[![Deployment is successfull](https://github.com/intigration/genislabs/actions/workflows/nuxt.yml/badge.svg)](https://github.com/intigration/genislabs/actions/workflows/nuxt.yml)
